@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class MainManager : MonoBehaviour
 {
     public Brick BrickPrefab;
@@ -11,10 +12,13 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText; // Added by me
     public GameObject GameOverText;
+    public GameObject MenuButton;
     
     private bool m_Started = false;
-    private int m_Points;
+    public int m_Points;
+    public int m_HighestScore;
     
     private bool m_GameOver = false;
 
@@ -22,6 +26,11 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        if (NameManager.Instance != null && NameManager.Instance.currentPlayerName != NameManager.Instance.lastPlayerName)
+        {
+            NameManager.Instance.highestScore = 0;
+        }
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -45,6 +54,9 @@ public class MainManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_Started = true;
+                
+                //BestScoreText.text = "Best Score: " + NameManager.Instance.playerNameString + ": " + NameManager.Instance.highestScore;
+
                 float randomDirection = Random.Range(-1.0f, 1.0f);
                 Vector3 forceDir = new Vector3(randomDirection, 1, 0);
                 forceDir.Normalize();
@@ -55,10 +67,18 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+            if(NameManager.Instance.highestScore < m_Points)
+            {
+                NameManager.Instance.highestScore = m_Points;
+            }
+            BestScoreText.text = "Best Score: " + NameManager.Instance.currentPlayerName + ": " + NameManager.Instance.highestScore;
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+
+            NameManager.Instance.SaveHighestScore();
         }
     }
 
@@ -72,5 +92,9 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        MenuButton.SetActive(true);
+
     }
+
+    
 }
