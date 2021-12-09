@@ -27,6 +27,11 @@ public class NameManager : MonoBehaviour
         
         DontDestroyOnLoad(gameObject);
         LoadHighestScore();
+        /*if (NameManager.Instance.currentPlayerName != NameManager.Instance.lastPlayerName)
+        {
+            NameManager.Instance.highestScore = 0;
+        }*/
+        //Debug.Log(lastPlayerName);
 
 
     }
@@ -52,9 +57,21 @@ public class NameManager : MonoBehaviour
     public void SaveHighestScore()
     {
         SaveData data = new SaveData();
-        data.lastPlayerName = currentPlayerName;
-        data.highestScore = highestScore;
+        
+            data.lastPlayerName = currentPlayerName;
+            data.highestScore = highestScore;
+            
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
 
+    public void SaveHighestScoreFromStartMenu()
+    {
+        SaveData data = new SaveData();
+
+        
+        data.highestScore = highestScore;
+        data.lastPlayerName = lastPlayerName;
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }

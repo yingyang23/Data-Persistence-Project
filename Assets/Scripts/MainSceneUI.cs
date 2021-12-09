@@ -34,6 +34,9 @@ public class MainSceneUI : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene(0);
+        NameManager.Instance.LoadHighestScore();
+        //NameManager.Instance.SaveHighestScore();
+        
     }
 
 }

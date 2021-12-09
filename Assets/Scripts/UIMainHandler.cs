@@ -26,6 +26,7 @@ public class UIMainHandler : MonoBehaviour
         {
             bestScoreText.text = "Best Score: " + NameManager.Instance.lastPlayerName + ": " + NameManager.Instance.highestScore;
             placeholderText.text = NameManager.Instance.lastPlayerName;
+            // NameManager.Instance.currentPlayerName = NameManager.Instance.lastPlayerName;
         }
     }
 
@@ -40,11 +41,15 @@ public class UIMainHandler : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene(1);
+        if (NameManager.Instance != null && NameManager.Instance.currentPlayerName != NameManager.Instance.lastPlayerName)
+        {
+            NameManager.Instance.highestScore = 0;
+        }
     }
 
     public void Exit()
     {
-        NameManager.Instance.SaveHighestScore();
+        NameManager.Instance.SaveHighestScoreFromStartMenu();
 
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();

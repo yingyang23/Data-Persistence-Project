@@ -18,7 +18,7 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     public int m_Points;
-    public int m_HighestScore;
+    // public int m_HighestScore;
     
     private bool m_GameOver = false;
 
@@ -27,10 +27,10 @@ public class MainManager : MonoBehaviour
     void Start()
     {
 
-        if (NameManager.Instance != null && NameManager.Instance.currentPlayerName != NameManager.Instance.lastPlayerName)
+        /*if (NameManager.Instance != null && NameManager.Instance.currentPlayerName != NameManager.Instance.lastPlayerName)
         {
             NameManager.Instance.highestScore = 0;
-        }
+        }*/
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -55,7 +55,7 @@ public class MainManager : MonoBehaviour
             {
                 m_Started = true;
                 
-                //BestScoreText.text = "Best Score: " + NameManager.Instance.playerNameString + ": " + NameManager.Instance.highestScore;
+                //BestScoreText.text = "Best Score: " + NameManager.Instance.currentPlayerName + ": " + NameManager.Instance.highestScore;
 
                 float randomDirection = Random.Range(-1.0f, 1.0f);
                 Vector3 forceDir = new Vector3(randomDirection, 1, 0);
@@ -71,10 +71,12 @@ public class MainManager : MonoBehaviour
             {
                 NameManager.Instance.highestScore = m_Points;
             }
+
             BestScoreText.text = "Best Score: " + NameManager.Instance.currentPlayerName + ": " + NameManager.Instance.highestScore;
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                NameManager.Instance.SaveHighestScore();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
 
